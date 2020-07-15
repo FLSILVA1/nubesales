@@ -1,0 +1,42 @@
+﻿@model NubeSalesMVC.Models.Receber
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Conta a Receber</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdPessoa)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdPessoa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DtaMovimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DtaMovimento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Valor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Valor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdTipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdTipo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Voltar a lista</a>
+</div>

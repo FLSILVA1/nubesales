@@ -1,0 +1,48 @@
+﻿@model NubeSalesMVC.Models.Pagar
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Criar novo</h2>
+
+<h4>Conta a Pagar</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdPessoa" class="control-label"></label>
+                <input asp-for="IdPessoa" class="form-control" />
+                <span asp-validation-for="IdPessoa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DtaMovimento" class="control-label"></label>
+                <input asp-for="DtaMovimento" class="form-control" />
+                <span asp-validation-for="DtaMovimento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Valor" class="control-label"></label>
+                <input asp-for="Valor" class="form-control" />
+                <span asp-validation-for="Valor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdTipo" class="control-label"></label>
+                <input asp-for="IdTipo" class="form-control" />
+                <span asp-validation-for="IdTipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar a lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

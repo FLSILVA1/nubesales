@@ -1,0 +1,45 @@
+﻿@model NubeSalesMVC.Models.Pagar
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Exclusão</h2>
+
+<h3>Deseja realmente exlcuir este registro?</h3>
+<div>
+    <h4>Conta a Pagar</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IdPessoa)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdPessoa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DtaMovimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DtaMovimento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Valor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Valor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdTipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IdTipo)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Excluir" class="btn btn-default" /> |
+        <a asp-action="Index">Voltar a lista</a>
+    </form>
+</div>

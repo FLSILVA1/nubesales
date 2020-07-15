@@ -1,0 +1,53 @@
+﻿@model IEnumerable<NubeSalesMVC.Models.Receber>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Lista de Contas a Receber</h2>
+
+<p>
+    <a asp-action="Create">Criar novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IdPessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DtaMovimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdTipo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPessoa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DtaMovimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTipo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
