@@ -24,13 +24,19 @@ namespace NubeSalesMVC.Migrations
 
                     b.Property<DateTime>("DtaMovimento");
 
-                    b.Property<int>("IdPessoa");
-
                     b.Property<int>("IdTipo");
+
+                    b.Property<int>("IdTipoDespesa");
+
+                    b.Property<string>("Observacao");
+
+                    b.Property<int>("PessoaId");
 
                     b.Property<double>("Valor");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PessoaId");
 
                     b.ToTable("Pagar");
                 });
@@ -54,15 +60,37 @@ namespace NubeSalesMVC.Migrations
 
                     b.Property<DateTime>("DtaMovimento");
 
-                    b.Property<int>("IdPessoa");
-
                     b.Property<int>("IdTipo");
+
+                    b.Property<int>("IdTipoReceita");
+
+                    b.Property<string>("Observacao");
+
+                    b.Property<int>("PessoaId");
 
                     b.Property<double>("Valor");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PessoaId");
+
                     b.ToTable("Receber");
+                });
+
+            modelBuilder.Entity("NubeSalesMVC.Models.Pagar", b =>
+                {
+                    b.HasOne("NubeSalesMVC.Models.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("NubeSalesMVC.Models.Receber", b =>
+                {
+                    b.HasOne("NubeSalesMVC.Models.Pessoa", "Pessoa")
+                        .WithMany()
+                        .HasForeignKey("PessoaId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

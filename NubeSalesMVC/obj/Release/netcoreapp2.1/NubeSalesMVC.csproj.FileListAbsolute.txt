@@ -51,3 +51,7 @@ C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\NubeSalesMVC.dll
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\NubeSalesMVC.pdb
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\NubeSalesMVC.genruntimeconfig.cache
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\NubeSalesMVC.csproj.CopyComplete
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelPagars\Index.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelPagars\SimpleSearch.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelRecebers\Index.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelRecebers\SimpleSearch.cshtml.g.cs

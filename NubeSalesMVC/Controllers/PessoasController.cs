@@ -5,23 +5,36 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NubeSalesMVC.Services;
 using NubeSalesMVC.Data;
+using NubeSalesMVC.Services.Exceptions;
 
 namespace NubeSalesMVC.Models
 {
     public class PessoasController : Controller
     {
         private readonly NubeSalesMVCContext _context;
+        private readonly PessoaService _pessoaService;
 
-        public PessoasController(NubeSalesMVCContext context)
+        public PessoasController(NubeSalesMVCContext context, PessoaService pessoaService)
         {
             _context = context;
+            _pessoaService = pessoaService;
         }
 
         // GET: Pessoas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pessoa.ToListAsync());
+            
+            ViewData["idFinPagar"] = true;
+            ViewData["idFinReceber"] = true;
+            /*
+            var result = await _pessoaService.FindByTipoAsync(true, true);
+            return View(result);
+            */
+            
+            return View(await _context.Pessoa.ToListAsync());            
+            
         }
 
         // GET: Pessoas/Details/5
@@ -53,7 +66,7 @@ namespace NubeSalesMVC.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Pessoa pessoa)
+        public async Task<IActionResult> Create(Pessoa pessoa)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +98,7 @@ namespace NubeSalesMVC.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Pessoa pessoa)
+        public async Task<IActionResult> Edit(int id, Pessoa pessoa)
         {
             if (id != pessoa.Id)
             {
@@ -138,15 +151,25 @@ namespace NubeSalesMVC.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var pessoa = await _context.Pessoa.FindAsync(id);
             _context.Pessoa.Remove(pessoa);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+
         }
+
 
         private bool PessoaExists(int id)
         {
             return _context.Pessoa.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> SimpleSearch(Boolean idFinPagar, Boolean idFinReceber)
+        {
+
+            var result = await _pessoaService.FindByTipoAsync(idFinPagar, idFinReceber);
+            return View(result);
         }
     }
 }

@@ -1,28 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NubeSalesMVC.Data;
 using NubeSalesMVC.Models;
+using NubeSalesMVC.Models.ViewModels;
+using NubeSalesMVC.Services;
 
 namespace NubeSalesMVC.Controllers
 {
     public class PagarsController : Controller
     {
         private readonly NubeSalesMVCContext _context;
+        private readonly PessoaService _pessoaService;
 
-        public PagarsController(NubeSalesMVCContext context)
+        public PagarsController(NubeSalesMVCContext context, PessoaService pessoaService)
         {
             _context = context;
+            _pessoaService = pessoaService;
         }
 
         // GET: Pagars
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Pagar.ToListAsync());
+            return View(await _context.Pagar.Include(x => x.Pessoa).ToListAsync());
         }
 
         // GET: Pagars/Details/5
@@ -40,13 +45,35 @@ namespace NubeSalesMVC.Controllers
                 return NotFound();
             }
 
-            return View(pagar);
+            var pessoas = await _pessoaService.BuscaPessoa(pagar.PessoaId);
+            var viewModel = new PagarFormViewModel { Pagar = pagar, Pessoas = pessoas };
+            return View(viewModel);
         }
 
         // GET: Pagars/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int? id)
         {
-            return View();
+            CarregaTipo();
+            var pessoas = await _pessoaService.FindAllCredor();
+            if (id != null)
+            {
+                var pagar = new Pagar
+                {
+                    IdTipoDespesa = (int)id,
+                    DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
+                };
+                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar };
+                return View(viewModel);
+            }
+            else
+            {
+                var pagar = new Pagar
+                {                    
+                    DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
+                };
+                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar };
+                return View(viewModel);
+            }
         }
 
         // POST: Pagars/Create
@@ -54,7 +81,7 @@ namespace NubeSalesMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdPessoa,DtaMovimento,Valor,IdTipo")] Pagar pagar)
+        public async Task<IActionResult> Create(Pagar pagar)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +105,10 @@ namespace NubeSalesMVC.Controllers
             {
                 return NotFound();
             }
-            return View(pagar);
+            CarregaTipo();
+            var pessoas = await _pessoaService.BuscaPessoa(pagar.PessoaId);
+            var viewModel = new PagarFormViewModel { Pagar = pagar, Pessoas = pessoas };
+            return View(viewModel);
         }
 
         // POST: Pagars/Edit/5
@@ -86,7 +116,7 @@ namespace NubeSalesMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdPessoa,DtaMovimento,Valor,IdTipo")] Pagar pagar)
+        public async Task<IActionResult> Edit(int id, Pagar pagar)
         {
             if (id != pagar.Id)
             {
@@ -131,7 +161,9 @@ namespace NubeSalesMVC.Controllers
                 return NotFound();
             }
 
-            return View(pagar);
+            var pessoas = await _pessoaService.BuscaPessoa(pagar.PessoaId);
+            var viewModel = new PagarFormViewModel { Pagar = pagar, Pessoas = pessoas };
+            return View(viewModel);
         }
 
         // POST: Pagars/Delete/5
@@ -149,5 +181,25 @@ namespace NubeSalesMVC.Controllers
         {
             return _context.Pagar.Any(e => e.Id == id);
         }
+
+        public void CarregaTipo()
+        {
+            var listaSituacao = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Aberto", Value = "0"},
+                new SelectListItem{Text = "Baixado", Value = "1"}
+            };
+
+            ViewBag.ListaSituacao = listaSituacao;
+
+            var tipoDespesa = new List<SelectListItem>
+            {
+                new SelectListItem{Text = "Despesas fixas", Value = "0" },
+                new SelectListItem{Text = "Despesas variáveis", Value = "1" },
+            };
+
+            ViewBag.ListaTipoDespesa = tipoDespesa;
+        }
+
     }
 }

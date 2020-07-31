@@ -1,7 +1,10 @@
-﻿@model NubeSalesMVC.Models.Pagar
+﻿@model NubeSalesMVC.Models.ViewModels.PagarFormViewModel
 
 @{
     ViewData["Title"] = "Delete";
+    ViewData["Tipo"] = Model.Pagar.CarregaSituacao(Model.Pagar.IdTipo);
+    ViewData["TipoDespesa"] = Model.Pagar.CarregaTipoDespesa(Model.Pagar.IdTipoDespesa);
+    ViewData["Pessoa"] = Model.Pessoas.First().Name;
 }
 
 <h2>Exclusão</h2>
@@ -12,34 +15,46 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.IdPessoa)
+            @Html.DisplayNameFor(model => model.Pagar.PessoaId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IdPessoa)
+            @ViewData["Pessoa"]
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DtaMovimento)
+            @Html.DisplayNameFor(model => model.Pagar.IdTipoDespesa)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DtaMovimento)
+            @ViewData["TipoDespesa"]
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Valor)
+            @Html.DisplayNameFor(model => model.Pagar.DtaMovimento)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Valor)
+            @Html.DisplayFor(model => model.Pagar.DtaMovimento)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IdTipo)
+            @Html.DisplayNameFor(model => model.Pagar.Valor)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IdTipo)
+            @Html.DisplayFor(model => model.Pagar.Valor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pagar.IdTipo)
+        </dt>
+        <dd>
+            @ViewData["Tipo"]
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pagar.Observacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pagar.Observacao)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Excluir" class="btn btn-default" /> |
+        <input type="hidden" asp-for="Pagar.Id" />
+        <input type="submit" value="Excluir" class="btn btn-danger" /> |
         <a asp-action="Index">Voltar a lista</a>
     </form>
 </div>

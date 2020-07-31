@@ -28,13 +28,20 @@
           "Microsoft.AspNetCore.Razor.Design": "2.1.2",
           "Microsoft.NETCore.App": "2.1.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.10",
-          "Pomelo.EntityFrameworkCore.MySql": "2.1.1"
+          "Pomelo.EntityFrameworkCore.MySql": "2.1.1",
+          "jquery-globalize": "1.4.2"
         },
         "runtime": {
           "NubeSalesMVC.dll": {}
         },
         "compile": {
           "NubeSalesMVC.dll": {}
+        }
+      },
+      "cldrjs/0.5.1": {},
+      "jquery-globalize/1.4.2": {
+        "dependencies": {
+          "cldrjs": "0.5.1"
         }
       },
       "Microsoft.AspNetCore.Razor.Design/2.1.2": {},
@@ -3516,6 +3523,20 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "cldrjs/0.5.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-v38w9mdsmia1Mr/25yvyRYi6t3nWAO5Z/2ySxVV/Xp9laXmNX5JUR4Q2GMzzeERFqMtFjeB/flFADhzhYe6c0w==",
+      "path": "cldrjs/0.5.1",
+      "hashPath": "cldrjs.0.5.1.nupkg.sha512"
+    },
+    "jquery-globalize/1.4.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0/QV5CcjbsFEy76Vz6oiXSbDL6E+2bru5w7gRpy9v48iXs8SCU/5WXmVA9V2jm36h+7HNw1qV8yheqAlo+SB0w==",
+      "path": "jquery-globalize/1.4.2",
+      "hashPath": "jquery-globalize.1.4.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Razor.Design/2.1.2": {
       "type": "package",

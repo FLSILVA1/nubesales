@@ -1,7 +1,10 @@
-﻿@model NubeSalesMVC.Models.Receber
+﻿@model NubeSalesMVC.Models.ViewModels.ReceberFormViewModel
 
 @{
     ViewData["Title"] = "Details";
+    ViewData["Tipo"] = Model.Receber.CarregaSituacao(Model.Receber.IdTipo);
+    ViewData["TipoReceita"] = Model.Receber.CarregaTipoReceita(Model.Receber.IdTipo);
+    ViewData["Pessoa"] = Model.Pessoas.First().Name;
 }
 
 <h2>Detalhes</h2>
@@ -11,32 +14,44 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.IdPessoa)
+            @Html.DisplayNameFor(model => model.Receber.PessoaId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IdPessoa)
+            @ViewData["Pessoa"]
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DtaMovimento)
+            @Html.DisplayNameFor(model => model.Receber.IdTipoReceita)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DtaMovimento)
+            @ViewData["TipoReceita"]
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Valor)
+            @Html.DisplayNameFor(model => model.Receber.DtaMovimento)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Valor)
+            @Html.DisplayFor(model => model.Receber.DtaMovimento)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IdTipo)
+            @Html.DisplayNameFor(model => model.Receber.Valor)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IdTipo)
+            @Html.DisplayFor(model => model.Receber.Valor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Receber.IdTipo)
+        </dt>
+        <dd>
+            @ViewData["Tipo"]
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Receber.Observacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Receber.Observacao)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Edit" asp-route-id="@Model.Receber.Id">Editar</a> |
     <a asp-action="Index">Voltar a lista</a>
 </div>

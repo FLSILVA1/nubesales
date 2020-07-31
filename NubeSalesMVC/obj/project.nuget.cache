@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "7Pf50+T1AXMcQowhpzwJav5t9dKyeJZ9/AavwnIOY6h5San8Px/ud7C9bf0JQNIwPasK9Af6zg57X7HsPTWFAA==",
+  "dgSpecHash": "knuX24QxuKbFAs2xdmwnqEwvc0QVPI3lizNxaKVMLY+Cx8/aT1fczxf7XrIAU7uApWYfIRCROP06mKqz38gW/Q==",
   "success": true,
   "projectFilePath": "C:\\Projetos\\NubeSalesMVC\\NubeSalesMVC\\NubeSalesMVC.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\fabio\\.nuget\\packages\\cldrjs\\0.5.1\\cldrjs.0.5.1.nupkg.sha512",
+    "C:\\Users\\fabio\\.nuget\\packages\\jquery-globalize\\1.4.2\\jquery-globalize.1.4.2.nupkg.sha512",
     "C:\\Users\\fabio\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.6\\microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512",
     "C:\\Users\\fabio\\.nuget\\packages\\microsoft.aspnetcore\\2.1.1\\microsoft.aspnetcore.2.1.1.nupkg.sha512",
     "C:\\Users\\fabio\\.nuget\\packages\\microsoft.aspnetcore.antiforgery\\2.1.1\\microsoft.aspnetcore.antiforgery.2.1.1.nupkg.sha512",
