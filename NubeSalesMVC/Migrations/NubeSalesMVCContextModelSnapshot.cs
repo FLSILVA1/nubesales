@@ -17,6 +17,22 @@ namespace NubeSalesMVC.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("NubeSalesMVC.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IntPagar");
+
+                    b.Property<bool>("IntReceber");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categoria");
+                });
+
             modelBuilder.Entity("NubeSalesMVC.Models.Pagar", b =>
                 {
                     b.Property<int>("Id")
@@ -46,6 +62,10 @@ namespace NubeSalesMVC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("IdFinPagar");
+
+                    b.Property<bool>("IdFinReceber");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
@@ -58,11 +78,11 @@ namespace NubeSalesMVC.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("CategoriaId");
+
                     b.Property<DateTime>("DtaMovimento");
 
                     b.Property<int>("IdTipo");
-
-                    b.Property<int>("IdTipoReceita");
 
                     b.Property<string>("Observacao");
 
@@ -71,6 +91,8 @@ namespace NubeSalesMVC.Migrations
                     b.Property<double>("Valor");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("PessoaId");
 
@@ -87,6 +109,11 @@ namespace NubeSalesMVC.Migrations
 
             modelBuilder.Entity("NubeSalesMVC.Models.Receber", b =>
                 {
+                    b.HasOne("NubeSalesMVC.Models.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("NubeSalesMVC.Models.Pessoa", "Pessoa")
                         .WithMany()
                         .HasForeignKey("PessoaId")

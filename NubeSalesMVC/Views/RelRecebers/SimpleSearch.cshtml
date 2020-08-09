@@ -1,39 +1,66 @@
-﻿@model NubeSalesMVC.Models.Login
-@{ Layout = "_LayoutLogin";
-                ViewBag.Title = "Painel Administrativo v1.0";
+﻿@model IEnumerable<NubeSalesMVC.Models.Receber>
+@{
+    ViewData["Title"] = "Relatorio de contas a receber";
+}
 
-                var tempData = TempData["ErroAutenticacao"];
-                var erroAutenticacao = tempData != null ? tempData.ToString() : string.Empty; }
+<h2>@ViewData["Title"]</h2>
 
-<div class="row">
-    <div class="col-4 offset-4">
-        <div class="login-panel panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Autenticar</h3>
-            </div>
-            <div class="panel-body">
-                @using (Html.BeginForm("Login", "Secure", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "col-xs-12", role = "form" }))
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Total = @Model.Sum(obj => obj.Valor).ToString("C")</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr class="success">
+                    <th>
+                        @Html.DisplayNameFor(model => model.PessoaId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoriaId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DtaMovimento)
+                    </th>
+                    <th style="text-align: right">
+                        @Html.DisplayNameFor(model => model.Valor)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IdTipo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Observacao)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-
-    @Html.AntiForgeryToken()
-
-                    <fieldset>
-                        <div class="form-group">
-                            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", placeholder = "Usuário" })
-                            @Html.ValidationMessageFor(model => model.Usuario, string.Empty, htmlAttributes: new { @class = "text-danger" })
-                        </div>
-                        <div class="form-group">
-                            @Html.PasswordFor(model => model.Senha, new { @class = "form-control", placeholder = "Senha" })
-                            @Html.ValidationMessageFor(model => model.Senha, string.Empty, htmlAttributes: new { @class = "text-danger" })
-                        </div>
-                        @if (!string.IsNullOrEmpty(erroAutenticacao))
-                        {
-        <text>
-            <span class="text-danger">@erroAutenticacao</span>
-        </text>}
-                        <button type="submit" class="btn btn-lg btn-primary btn-block">Entrar</button>
-                    </fieldset>}
-            </div>
-        </div>
+                    <tr style="font-size:smaller">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Pessoa.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Categoria.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DtaMovimento)
+                        </td>
+                        <td style="text-align: right">
+                           R$ @Html.DisplayFor(modelItem => item.Valor)
+                        </td>
+                        <td>
+                            @{
+                                ViewData["Tipo"] = item.CarregaSituacao(item.IdTipo);
+                            }
+                            @ViewData["Tipo"]
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacao)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Relatorio de contas a pagar";
     ViewData["minDate"] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("yyyy-MM-dd");
-    ViewData["maxDate"] = DateTime.Now.ToString("yyyy-MM-dd");
+    ViewData["maxDate"] = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month)).ToString("yyyy-MM-dd");
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -13,13 +13,22 @@
                 <div class="form-group">
                     <label for="minDate" class="col-lg-2 control-label">Início</label>
                     <div class="col-lg-10">
-                        <input type="date" name="minDate" class="form-control" value="@ViewData["minDate"]"/>
+                        <input type="date" name="minDate" class="form-control" value="@ViewData["minDate"]" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="maxDate" class="col-lg-2 control-label">Fim</label>
                     <div class="col-lg-10">
-                        <input type="date" name="maxDate" class="form-control" value="@ViewData["maxDate"]"/>
+                        <input type="date" name="maxDate" class="form-control" value="@ViewData["maxDate"]" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="situacao" class="col-lg-2 control-label">Situação</label>
+                    <div class="col-lg-10">
+                        <select class="form-control"
+                                asp-items=ViewBag.ListaSituacao_rec
+                                value="@ViewData["situacao"]"
+                                name="situacao"></select>
                     </div>
                 </div>
                 <div class="form-group">

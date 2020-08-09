@@ -10,5 +10,8 @@ namespace NubeSalesMVC.Models.ViewModels
         public Pagar Pagar { get; set; }
 
         public ICollection<Pessoa> Pessoas { get; set; }
+        public ICollection<Categoria> Categorias { get; set; }
+
+
     }
 }

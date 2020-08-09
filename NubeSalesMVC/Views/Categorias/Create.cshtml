@@ -1,0 +1,47 @@
+﻿@model NubeSalesMVC.Models.Categoria
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Novo Cadastro</h2>
+
+<h4>Categoria</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IntPagar" class="control-label"></label>
+                <label class="switch">
+                    <input asp-for="IntPagar" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="IntReceber" class="control-label"></label>
+                <label class="switch">
+                    <input asp-for="IntReceber" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Criar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar a lista</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

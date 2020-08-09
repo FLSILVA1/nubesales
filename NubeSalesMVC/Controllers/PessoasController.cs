@@ -22,19 +22,48 @@ namespace NubeSalesMVC.Models
             _pessoaService = pessoaService;
         }
 
+
         // GET: Pessoas
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ordem, string filtroAtual, string filtro, int? pagina)
         {
-            
-            ViewData["idFinPagar"] = true;
-            ViewData["idFinReceber"] = true;
-            /*
-            var result = await _pessoaService.FindByTipoAsync(true, true);
-            return View(result);
-            */
-            
-            return View(await _context.Pessoa.ToListAsync());            
-            
+
+            ViewData["ordemAtual"] = ordem;
+            ViewData["NomeParm"] = String.IsNullOrEmpty(ordem) ? "nome_desc" : "";
+            if (filtro != null)
+            {
+                pagina = 1;
+            }
+            else
+            {
+                filtro = filtroAtual;
+            }
+
+            ViewData["filtroAtual"] = filtro;
+
+            var estudantes = from est in _context.Pessoa
+                             select est;
+
+
+            if (!String.IsNullOrEmpty(filtro))
+            {
+                estudantes = estudantes.Where(est => est.Name.Contains(filtro));
+            }
+
+            switch (ordem)
+            {
+                case "nome_desc":
+                    estudantes = estudantes.OrderByDescending(est => est.Name);
+                    break;
+                default:
+                    estudantes = estudantes.OrderBy(est => est.Name);
+                    break;
+            }
+
+            int pageSize = 15;
+            return View(await PaginatedList<Pessoa>.CreateAsync(estudantes.AsNoTracking(), pagina ?? 1, pageSize));
+
+            //return View(await _context.Pessoa.ToListAsync());            
+
         }
 
         // GET: Pessoas/Details/5

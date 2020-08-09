@@ -12,7 +12,9 @@ namespace NubeSalesMVC.Models.ViewModels
         public Receber Receber { get; set; }
 
         public ICollection<Pessoa> Pessoas { get; set; }
-        
+
+        public ICollection<Categoria> Categorias { get; set; }
+
 
     }
 }

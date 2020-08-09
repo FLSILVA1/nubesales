@@ -1,0 +1,90 @@
+﻿@model PaginatedList<NubeSalesMVC.Models.Categoria>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<h2>Lista de Categorias</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-default btn-sm">
+        Criar novo
+    </a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        Procurar por nome : <input type="text" name="filtro" value="@ViewData["filtroAtual"]" />
+        <input type="submit" value="Filtrar" class="btn btn-primary" /> |
+        <a asp-controller="Categorias" asp-action="Index">Retornar para lista</a>
+    </div>
+</form>
+<div class="panel-body">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr class="navbar-default">
+                <th>
+                    <a style="color:white"
+                       asp-action="Index"
+                       asp-route-ordem="@ViewData["NomeParm"]"
+                       asp-route-filtroAtual="@ViewData["filtroAtual"]">
+                        Nome
+                    </a>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                           data-toggle="tooltip"
+                           data-placement="bottom" title="Editar">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        |
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                           data-toggle="tooltip"
+                           data-placement="bottom" title="Mais detalhes">
+                            <span class="glyphicon glyphicon-zoom-in"></span>
+                        </a>
+                        |
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                           data-toggle="tooltip"
+                           data-placement="bottom" title="Excluir">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-ordem="@ViewData["ordemAtual"]"
+   asp-route-pagina="@(Model.PageIndex - 1)"
+   asp-route-filtroAtual="@ViewData["filtroAtual"]"
+   class="btn btn-sm btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-ordem="@ViewData["ordemAtual"]"
+   asp-route-pagina="@(Model.PageIndex + 1)"
+   asp-route-filtroAtual="@ViewData["filtroAtual"]"
+   class="btn btn-sm btn-default @nextDisabled">
+    Próximo
+</a>
+

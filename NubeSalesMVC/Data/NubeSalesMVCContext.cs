@@ -19,5 +19,7 @@ namespace NubeSalesMVC.Data
         public DbSet<NubeSalesMVC.Models.Pagar> Pagar { get; set; }
 
         public DbSet<NubeSalesMVC.Models.Pessoa> Pessoa { get; set; }
+
+        public DbSet<NubeSalesMVC.Models.Categoria> Categoria { get; set; }
     }
 }

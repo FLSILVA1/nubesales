@@ -16,20 +16,83 @@ namespace NubeSalesMVC.Controllers
     {
         private readonly NubeSalesMVCContext _context;
         private readonly PessoaService _pessoaService;
+        private readonly ReceberService _receberService;
+        private readonly CategoriaService _categoriaService;
 
-        public RecebersController(NubeSalesMVCContext context, PessoaService pessoaService)
+        public RecebersController(NubeSalesMVCContext context, PessoaService pessoaService, ReceberService receberService, CategoriaService categoriaService)
         {
             _context = context;
             _pessoaService = pessoaService;
+            _receberService = receberService;
+            _categoriaService = categoriaService;
         }
 
         // GET: Recebers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string ordem, string filtroAtual, string filtro, int? pagina, int? situacao, DateTime? minDate, DateTime? maxDate)
         {
-            var lista = await _context.Receber
-                                .Include(x => x.Pessoa)
-                                .ToListAsync();
-            return View(lista);
+            CarregaTipo();
+            //contas vencendo - alerta
+            var ctvenc = await _receberService.ContasVencendo();
+            var qtde = ctvenc.Count;
+            if (qtde > 0)
+            {
+                ViewData["MsgALerta"] = "Atenção! Existem " + qtde.ToString() + " contas próximas ao vencimento ou vencidas.";
+            }
+            ViewData["ordemAtual"] = ordem;
+            ViewData["NomeParm"] = String.IsNullOrEmpty(ordem) ? "nome_desc" : "";
+            ViewData["situacao"] = situacao.GetValueOrDefault(0);
+            if (!minDate.HasValue)
+            {
+                minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+            if (!maxDate.HasValue)
+            {
+                maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+            }
+            ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+            ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+            if (filtro != null)
+            {
+                pagina = 1;
+            }
+            else
+            {
+                filtro = filtroAtual;
+            }
+
+            ViewData["filtroAtual"] = filtro;
+
+            var contas = from conta in _context.Receber
+                         select conta;
+
+
+            if (!String.IsNullOrEmpty(filtro))
+            {
+                contas = contas.Where(conta => conta.Pessoa.Name.Contains(filtro));
+            }
+            //filtro de data e situacao
+            contas = contas
+                        .Where(conta => conta.DtaMovimento >= minDate.Value & conta.DtaMovimento <= maxDate.Value)
+                        .Where(conta => conta.IdTipo == situacao.GetValueOrDefault(0));
+
+            switch (ordem)
+            {
+                case "nome_desc":
+                    contas = contas.OrderByDescending(conta => conta.DtaMovimento);
+                    break;
+                default:
+                    contas = contas.OrderBy(conta => conta.DtaMovimento);
+                    break;
+            }
+
+
+            contas = contas.Include(x => x.Pessoa);
+            contas = contas.Include(x => x.Categoria);
+
+            int pageSize = 15;
+            return View(await PaginatedList<Receber>.CreateAsync(contas.AsNoTracking(), pagina ?? 1, pageSize));
+
+
         }
 
         // GET: Recebers/Details/5
@@ -47,23 +110,25 @@ namespace NubeSalesMVC.Controllers
                 return NotFound();
             }
             var pessoas = await _pessoaService.BuscaPessoa(receber.PessoaId);
-            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas };
+            var categ = await _categoriaService.FindById(receber.CategoriaId);
+            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas, Categorias = categ };
             return View(viewModel);
         }
 
         // GET: Recebers/Create
-        public async Task<IActionResult> Create(int? id)
+        public async Task<IActionResult> Create(int? IdCategoria)
         {
             CarregaTipo();         
             var pessoas = await _pessoaService.FindAllCliente();
-            if (id != null)
+            var categorias = await _categoriaService.FindByTipo("R");
+            if (IdCategoria != null)
             {
                 var receber = new Receber
                 {
-                    IdTipoReceita = (int)id,
+                    CategoriaId = (int)IdCategoria,
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
                 };            
-                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber };
+                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias };
                 return View(viewModel);
             }
             else
@@ -72,7 +137,7 @@ namespace NubeSalesMVC.Controllers
                 {
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
                 };
-                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber };
+                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias };
                 return View(viewModel);
             }
             
@@ -109,7 +174,8 @@ namespace NubeSalesMVC.Controllers
             }
             CarregaTipo();
             var pessoas = await _pessoaService.BuscaPessoa(receber.PessoaId);
-            var viewModel = new ReceberFormViewModel {Receber = receber, Pessoas = pessoas };
+            var categ = await _categoriaService.FindByTipo("R");
+            var viewModel = new ReceberFormViewModel {Receber = receber, Pessoas = pessoas, Categorias = categ };
             return View(viewModel);
         }
 
@@ -163,7 +229,8 @@ namespace NubeSalesMVC.Controllers
                 return NotFound();
             }
             var pessoas = await _pessoaService.BuscaPessoa(receber.PessoaId);
-            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas };
+            var categ = await _categoriaService.FindById(receber.CategoriaId);
+            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas, Categorias = categ };
             return View(viewModel);
         }
 

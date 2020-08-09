@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "Delete";
     ViewData["Tipo"] = Model.Receber.CarregaSituacao(Model.Receber.IdTipo);
-    ViewData["TipoReceita"] = Model.Receber.CarregaTipoReceita(Model.Receber.IdTipo);
-    ViewData["Pessoa"] = Model.Pessoas.First().Name;
 }
 
 <h2>Exclusão</h2>
@@ -18,13 +16,13 @@
             @Html.DisplayNameFor(model => model.Receber.PessoaId)
         </dt>
         <dd>
-            @ViewData["Pessoa"]
+            @Html.DisplayFor(model => model.Receber.Pessoa.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Receber.IdTipoReceita)
+            @Html.DisplayNameFor(model => model.Receber.CategoriaId)
         </dt>
         <dd>
-            @ViewData["TipoReceita"]
+            @Html.DisplayFor(model => model.Receber.Categoria.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Receber.DtaMovimento)
@@ -39,10 +37,10 @@
             @Html.DisplayFor(model => model.Receber.Valor)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Receber.IdTipo)
+            @Html.DisplayNameFor(model => model.Receber.CategoriaId)
         </dt>
         <dd>
-            @ViewData["Tipo"]
+            @Html.DisplayNameFor(model => model.Receber.Categoria.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Receber.Observacao)

@@ -17,7 +17,7 @@ namespace NubeSalesMVC.Models
         public int PessoaId { get; set; }
         
         [Display(Name = "Vencimento")]   
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DtaMovimento { get; set; }
         
@@ -28,11 +28,13 @@ namespace NubeSalesMVC.Models
         [Display(Name = "Situação")]
         public int IdTipo { get; set; }
 
-        [Display(Name = "Tipo Receita")]
-        public int IdTipoReceita { get; set; }
-
         [Display(Name = "Observação")]
         public string Observacao { get; set; }
+
+        public Categoria Categoria { get; set; }
+
+        [Display(Name = "Tipo Receita")]
+        public int CategoriaId { get; set; }
 
         public string CarregaSituacao(int idTipo)
         {
@@ -45,29 +47,6 @@ namespace NubeSalesMVC.Models
                 return "Aberto";
             }
             
-        }
-        public string CarregaTipoReceita(int idTipoReceita)
-        {
-            if (idTipoReceita == 0)
-            {
-                return "Contratos";
-            }
-            else if (idTipoReceita == 1)
-            {
-                return "Serviços";
-            }
-            else if (idTipoReceita == 2)
-            {
-                return "Licenças";
-            }
-            else if (idTipoReceita == 3)
-            {
-                return "Hardware";
-            }
-            else
-            {
-                return "<Não definido>";
-            }
         }
 
     }

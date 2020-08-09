@@ -37,12 +37,12 @@ namespace NubeSalesMVC
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            /*
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options => {
                         options.ExpireTimeSpan = TimeSpan.FromHours(1);
                         options.LoginPath = new PathString("/Home/Login");
-                    });
+                    }); */
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -51,6 +51,9 @@ namespace NubeSalesMVC
                         builder => builder.MigrationsAssembly("NubeSalesMVC")));
 
             services.AddScoped<PessoaService>();
+            services.AddScoped<CategoriaService>();
+            services.AddScoped<PagarService>();
+            services.AddScoped<ReceberService>();
             services.AddScoped<RelReceberService>();
             services.AddScoped<RelPagarService>();
         }

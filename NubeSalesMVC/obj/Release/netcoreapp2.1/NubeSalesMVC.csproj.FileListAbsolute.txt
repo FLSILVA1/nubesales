@@ -55,3 +55,9 @@ C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelP
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelPagars\SimpleSearch.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelRecebers\Index.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\RelRecebers\SimpleSearch.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Release\netcoreapp2.1\libman.json
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\Categorias\Create.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\Categorias\Delete.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\Categorias\Details.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\Categorias\Edit.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Release\netcoreapp2.1\Razor\Views\Categorias\Index.cshtml.g.cs

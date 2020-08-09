@@ -5,7 +5,6 @@ C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Debug\netcoreapp2.1\NubeSalesMVC.deps.
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Debug\netcoreapp2.1\NubeSalesMVC.runtimeconfig.json
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Debug\netcoreapp2.1\NubeSalesMVC.runtimeconfig.dev.json
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Debug\netcoreapp2.1\NubeSalesMVC.dll
-C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.csprojAssemblyReference.cache
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.AssemblyInfoInputs.cache
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.AssemblyInfo.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.RazorAssemblyInfo.cache
@@ -55,5 +54,10 @@ C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\RelRec
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\RelPagars\Index.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\RelPagars\SimpleSearch.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.csproj.CoreCompileInputs.cache
-C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Shared\_LayoutLogin.cshtml.g.cs
-C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Home\Login.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\bin\Debug\netcoreapp2.1\libman.json
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\NubeSalesMVC.csprojAssemblyReference.cache
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Create.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Delete.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Details.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Edit.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Index.cshtml.g.cs

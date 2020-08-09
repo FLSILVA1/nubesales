@@ -23,7 +23,7 @@ namespace NubeSalesMVC.Controllers
             CarregaTipo_rel();
             return View();
         }
-        public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate)
+        public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate, int? situacao)
         {
             if (!minDate.HasValue)
             {
@@ -31,11 +31,11 @@ namespace NubeSalesMVC.Controllers
             }
             if (!maxDate.HasValue)
             {
-                maxDate = DateTime.Now;
+                maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
             }
             ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
             ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
-            var result = await _relReceberService.FindByDateAsync(minDate, maxDate);
+            var result = await _relReceberService.FindByDateAsync(minDate, maxDate, situacao);
             return View(result);
         }
 
@@ -48,16 +48,6 @@ namespace NubeSalesMVC.Controllers
             };
 
             ViewBag.ListaSituacao_rer = listaSituacao;
-
-            var tipoReceita = new List<SelectListItem>
-            {
-                new SelectListItem{Text = "Contratos", Value = "0" },
-                new SelectListItem{Text = "Serviços", Value = "1" },
-                new SelectListItem{Text = "Licenças", Value = "2" },
-                new SelectListItem{Text = "Hardware", Value = "3" }
-            };
-
-            ViewBag.ListaTipoReceita_rel = tipoReceita;
 
         }
     }

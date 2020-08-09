@@ -19,7 +19,7 @@ namespace NubeSalesMVC.Models
         public int PessoaId { get; set; }
 
         [Display(Name = "Vencimento")]
-        //[DataType(DataType.Date)]
+        [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DtaMovimento { get; set; }
 
@@ -31,10 +31,12 @@ namespace NubeSalesMVC.Models
         public int IdTipo { get; set; }
 
         [Display(Name="Tipo Despesa")]
-        public int IdTipoDespesa { get; set; }
+        public int CategoriaId { get; set; }
 
         [Display(Name="Observação")]
         public string Observacao { get; set; }
+
+        public Categoria Categoria { get; set; }
 
 
 

@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "Delete";
     ViewData["Tipo"] = Model.Pagar.CarregaSituacao(Model.Pagar.IdTipo);
-    ViewData["TipoDespesa"] = Model.Pagar.CarregaTipoDespesa(Model.Pagar.IdTipoDespesa);
-    ViewData["Pessoa"] = Model.Pessoas.First().Name;
 }
 
 <h2>Exclusão</h2>
@@ -18,13 +16,13 @@
             @Html.DisplayNameFor(model => model.Pagar.PessoaId)
         </dt>
         <dd>
-            @ViewData["Pessoa"]
+            @Html.DisplayFor(model => model.Pagar.Pessoa.Name)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Pagar.IdTipoDespesa)
+            @Html.DisplayNameFor(model => model.Pagar.CategoriaId)
         </dt>
         <dd>
-            @ViewData["TipoDespesa"]
+            @Html.DisplayFor(model => model.Pagar.Categoria.Name)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Pagar.DtaMovimento)

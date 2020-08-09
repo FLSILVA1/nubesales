@@ -1,0 +1,48 @@
+﻿@model NubeSalesMVC.Models.Categoria
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalhes</h2>
+
+<div>
+    <h4>Categoria</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IntPagar)
+        </dt>
+        <dd>
+            @{ if (Model.IntPagar == true)
+                {
+                    ViewData["Pagar"] = "Sim";
+                }
+                else { ViewData["Pagar"] = "Não"; }
+            }
+            @ViewData["Pagar"]
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IntReceber)
+        </dt>
+        <dd>
+            @{ if (Model.IntReceber == true)
+                {
+                    ViewData["Receber"] = "Sim";
+                }
+                else { ViewData["Receber"] = "Não"; }
+            }
+            @ViewData["Receber"]
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+    <a asp-action="Index">Voltar a lista</a>
+</div>

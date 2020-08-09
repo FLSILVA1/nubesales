@@ -1,4 +1,5 @@
-﻿@{
+﻿@model NubeSalesMVC.Models.ViewModels.HomeFormViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 <h2>Principais Ações</h2>
@@ -15,11 +16,10 @@
                     Nova conta a receber
                 </button>
                 <div class="dropdown-menu">
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="0" asp-controller="Recebers">Contratos</a>
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="1" asp-controller="Recebers">Serviços</a>
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="2" asp-controller="Recebers">Licenças</a>
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="3" asp-controller="Recebers">Hardware</a>
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="4" asp-controller="Recebers">Comissões</a>
+                    @foreach (var itemR in Model.Categorias.Where(x => x.IntReceber == true).Take(8))
+                    {
+                        <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemR.Id" asp-controller="Recebers">@itemR.Name</a>
+                    }
                 </div>
             </div>
         </div>
@@ -30,8 +30,10 @@
                     Nova conta a pagar
                 </button>
                 <div class="dropdown-menu">
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="0" asp-controller="Pagars">Despesa fixa</a>
-                    <a class="btn btn-link" asp-action="Create" asp-route-id="1" asp-controller="Pagars">Despesa variável</a>
+                    @foreach (var itemP in Model.Categorias.Where(x => x.IntPagar == true).Take(8))
+                    {
+                        <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemP.Id" asp-controller="Pagars">@itemP.Name</a>
+                    }
                 </div>
             </div>
         </div>

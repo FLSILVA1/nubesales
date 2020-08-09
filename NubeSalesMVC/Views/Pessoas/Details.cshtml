@@ -16,6 +16,30 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdFinReceber)
+        </dt>
+        <dd>
+            @{ if (Model.IdFinReceber == true)
+                {
+                    ViewData["Cliente"] = "Sim";
+                }
+                else { ViewData["Cliente"] = "Não"; }
+            }
+            @ViewData["Cliente"]
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IdFinPagar)
+        </dt>
+        <dd>
+            @{ if (Model.IdFinPagar == true)
+                {
+                    ViewData["Credor"] = "Sim";
+                }
+                else { ViewData["Credor"] = "Não"; }
+            }
+            @ViewData["Credor"]
+        </dd>
     </dl>
 </div>
 <div>
