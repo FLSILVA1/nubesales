@@ -1,5 +1,0 @@
-user: fabio4@teste.com
-senha: !Fb123
-
-sistema@nubetecnologia.com.br
-!Nt@125
