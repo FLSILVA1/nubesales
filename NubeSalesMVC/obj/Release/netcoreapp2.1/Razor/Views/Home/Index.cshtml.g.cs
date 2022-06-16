@@ -64,7 +64,7 @@ using NubeSalesMVC.Models;
             WriteLiteral("<h2>Principais Ações</h2>\r\n<div class=\"col-lg-12\">\r\n    <div class=\"list-group col-lg-4\">\r\n\r\n        <div>\r\n            ");
             EndContext();
             BeginContext(222, 92, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "09488a19d1e342bc90525bd57e3626c4", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6460b2aeff3c4429a24b9ac7cc939dbb", async() => {
                 BeginContext(291, 19, true);
                 WriteLiteral("Novo cliente/credor");
                 EndContext();
@@ -107,7 +107,7 @@ using NubeSalesMVC.Models;
             WriteLiteral("                        ");
             EndContext();
             BeginContext(840, 119, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2a6d81544e6e4a18880e2e452bd8ffc7", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "32da6fe7728742be8b58a9f81a23ff81", async() => {
                 BeginContext(945, 10, false);
 #line 21 "C:\Projetos\NubeSalesMVC\NubeSalesMVC\Views\Home\Index.cshtml"
                                                                                                                            Write(itemR.Name);
@@ -176,7 +176,7 @@ using NubeSalesMVC.Models;
             WriteLiteral("                        ");
             EndContext();
             BeginContext(1546, 117, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4a9db0e512f4436ea4b6b93cea5d5f59", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "625c0ff7b08e4e639b8793d97caa11f8", async() => {
                 BeginContext(1649, 10, false);
 #line 35 "C:\Projetos\NubeSalesMVC\NubeSalesMVC\Views\Home\Index.cshtml"
                                                                                                                          Write(itemP.Name);

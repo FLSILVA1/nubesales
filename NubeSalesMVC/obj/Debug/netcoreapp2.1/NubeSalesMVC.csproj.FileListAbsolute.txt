@@ -61,3 +61,7 @@ C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Catego
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Details.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Edit.cshtml.g.cs
 C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Categorias\Index.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\ChartPagars\PieChart.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\RelPagars\GroupingSearch.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\RelRecebers\GroupingSearch.cshtml.g.cs
+C:\Projetos\NubeSalesMVC\NubeSalesMVC\obj\Debug\netcoreapp2.1\Razor\Views\Success.cshtml.g.cs

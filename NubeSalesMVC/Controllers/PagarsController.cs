@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +32,29 @@ namespace NubeSalesMVC.Controllers
             _categoriaService = categoriaService;
         }
 
+
+        public async Task<IActionResult> FilteredIndex()
+        {
+
+            FiltroGrade filtroGradePagar = JsonSerializer.Deserialize<FiltroGrade>(TempData["FiltroGrade"] as string);
+
+            if (filtroGradePagar != null)
+            {
+                return RedirectToAction("Index",
+                    new
+                    {
+                        ordem = filtroGradePagar.Ordem,
+                        filtroAtual = filtroGradePagar.FiltroAtual,
+                        filtro = filtroGradePagar.Filtro,
+                        pagina = filtroGradePagar.Pagina,
+                        situacao = filtroGradePagar.Situacao,
+                        minDate = filtroGradePagar.MinDate,
+                        maxDate = filtroGradePagar.MaxDate
+                    });
+            }
+
+            return RedirectToAction("Index");
+        }
         // GET: Pagars
         public async Task<IActionResult> Index(string ordem, string filtroAtual, string filtro, int? pagina, int? situacao, DateTime? minDate, DateTime? maxDate)
         {
@@ -90,6 +117,19 @@ namespace NubeSalesMVC.Controllers
             contas = contas.Include(x => x.Pessoa);
             contas = contas.Include(x => x.Categoria);
 
+            //Guarda o filtro atual
+            var filtroGrade = new FiltroGrade()
+            {
+                Ordem = ordem,
+                Filtro = filtro,
+                FiltroAtual = filtroAtual,
+                MinDate = minDate,
+                MaxDate = maxDate,
+                Pagina = pagina,
+                Situacao = situacao
+            };
+            TempData["FiltroGrade"] = JsonSerializer.Serialize(filtroGrade);
+
             int pageSize = 15;
             return View(await PaginatedList<Pagar>.CreateAsync(contas.AsNoTracking(), pagina ?? 1, pageSize));
 
@@ -130,7 +170,7 @@ namespace NubeSalesMVC.Controllers
                     CategoriaId = (int)id,
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
                 };
-                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar, Categorias = categorias };
+                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar, Categorias = categorias, NroParcelas = 1 };
                 return View(viewModel);
             }
             else
@@ -139,7 +179,7 @@ namespace NubeSalesMVC.Controllers
                 {
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
                 };
-                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar, Categorias = categorias };
+                var viewModel = new PagarFormViewModel { Pessoas = pessoas, Pagar = pagar, Categorias = categorias, NroParcelas = 1 };
                 return View(viewModel);
             }
         }
@@ -149,13 +189,48 @@ namespace NubeSalesMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Pagar pagar)
+        public async Task<IActionResult> Create(Pagar pagar, int? nroParcelas)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pagar);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (!nroParcelas.HasValue || nroParcelas < 0) { nroParcelas = 1; }
+                if (nroParcelas.HasValue && nroParcelas > 1)
+                {
+                    List<Pagar> parcelas = new List<Pagar> { };
+                    for (int i = 1; i <= nroParcelas; i++)
+                    {
+                        parcelas.Add(item: new Pagar(
+                            pagar.Pessoa,
+                            pagar.PessoaId,
+                            pagar.DtaMovimento.AddMonths(i - 1),
+                            pagar.Valor,
+                            pagar.IdTipo,
+                            pagar.CategoriaId,
+                            pagar.Observacao + " (Parc. " + i + "/" + nroParcelas + ")",
+                            pagar.Categoria));
+                    }
+
+                    var idOrigem = 0;
+                    foreach (var poPagar in parcelas)
+                    {
+                        poPagar.IdOrigem = idOrigem;
+
+                        _context.Add(poPagar);
+                        await _context.SaveChangesAsync();
+
+                        if (idOrigem == 0)
+                        {
+                            idOrigem = poPagar.IdOrigem;
+                        }
+                    }
+                }
+                else
+                {
+                    _context.Add(pagar);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(FilteredIndex));
+
             }
             return View(pagar);
         }
@@ -210,7 +285,7 @@ namespace NubeSalesMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(FilteredIndex));
             }
             return View(pagar);
         }
@@ -244,7 +319,7 @@ namespace NubeSalesMVC.Controllers
             var pagar = await _context.Pagar.FindAsync(id);
             _context.Pagar.Remove(pagar);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(FilteredIndex));
         }
 
         private bool PagarExists(int id)
@@ -257,19 +332,71 @@ namespace NubeSalesMVC.Controllers
             var listaSituacao = new List<SelectListItem>
             {
                 new SelectListItem{Text = "Aberto", Value = "0"},
-                new SelectListItem{Text = "Baixado", Value = "1"}
+                new SelectListItem{Text = "Quitado", Value = "1"}
             };
 
             ViewBag.ListaSituacao = listaSituacao;
 
-            var tipoDespesa = new List<SelectListItem>
-            {
-                new SelectListItem{Text = "Despesas fixas", Value = "0" },
-                new SelectListItem{Text = "Despesas variáveis", Value = "1" },
-            };
-
-            ViewBag.ListaTipoDespesa = tipoDespesa;
         }
 
+        
+        [HttpPost]
+        public async Task<IActionResult> UploadImagem(IList<IFormFile> arquivos)
+        {
+            IFormFile imagemEnviada = arquivos.FirstOrDefault();
+            if (imagemEnviada != null || imagemEnviada.ContentType.ToLower().StartsWith("image/"))
+            {
+                MemoryStream ms = new MemoryStream();
+                imagemEnviada.OpenReadStream().CopyTo(ms);
+
+                Imagem imagemEntity = new Imagem()
+                {
+                    Id = NextImagemId(),
+                    Nome = imagemEnviada.FileName,
+                    Dados = ms.ToArray(),
+                    ContentType = imagemEnviada.ContentType
+                };
+                _context.Imagens.Add(imagemEntity);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+        private int NextImagemId()
+        {
+            var proximoID = _context.Imagens.Max(x => x.Id);
+            proximoID++;
+
+            return proximoID;
+        }
+
+        [HttpGet]
+        public FileStreamResult VerImagem(int id)
+        {
+            Imagem imagem = _context.Imagens.FirstOrDefault(m => m.Id == id);
+            MemoryStream ms = new MemoryStream(imagem.Dados);
+            return new FileStreamResult(ms, imagem.ContentType);
+        }
+
+        [HttpPost, ActionName("DeleteImg")]
+        public async Task<IActionResult> DelImagem(int id)
+        {
+            var img = await _context.Imagens.FindAsync(id);
+            try
+            {
+                _context.Imagens.Remove(img);
+                await _context.SaveChangesAsync();
+                ViewData["msgErro"] = "";
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                ViewData["msgErro"] = "Erro! Não foi possível excluir a informação";
+                return RedirectToAction(nameof(Index));
+            }
+
+        }
+
+      
     }
 }

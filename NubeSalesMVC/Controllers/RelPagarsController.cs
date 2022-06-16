@@ -18,10 +18,36 @@ namespace NubeSalesMVC.Controllers
             _relPagarService = relPagarService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string tipoRel)
         {
             CarregaTipo_rel();
+            if (tipoRel == "G")
+            {
+                ViewData["acaoRel"] = "GroupingSearch";
+            }
+            else
+            {
+                ViewData["acaoRel"] = "SimpleSearch";
+            }
             return View();
+        }
+        public async Task<IActionResult> GroupingSearch(DateTime? minDate, DateTime? maxDate, int? situacao)
+        {
+            if (!minDate.HasValue)
+            {
+                minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            }
+            if (!maxDate.HasValue)
+            {
+                maxDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+            }
+            ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+            ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+            var result = await _relPagarService.FindByDateGroupingAsync(minDate, maxDate, situacao);
+
+            return View(result);
+
+
         }
         public async Task<IActionResult> SimpleSearch(DateTime? minDate, DateTime? maxDate, int? situacao)
         {
@@ -36,14 +62,17 @@ namespace NubeSalesMVC.Controllers
             ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
             ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
             var result = await _relPagarService.FindByDateAsync(minDate, maxDate, situacao);
+
             return View(result);
+
+
         }
         public void CarregaTipo_rel()
         {
             var listaSituacao = new List<SelectListItem>
             {
                 new SelectListItem{Text = "Aberto", Value = "0"},
-                new SelectListItem{Text = "Baixado", Value = "1"}
+                new SelectListItem{Text = "Quitado", Value = "1"}
             };
 
             ViewBag.ListaSituacao_rec = listaSituacao;

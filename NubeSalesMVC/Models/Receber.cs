@@ -36,11 +36,37 @@ namespace NubeSalesMVC.Models
         [Display(Name = "Tipo Receita")]
         public int CategoriaId { get; set; }
 
+        public DateTime DataAlteracao { get; set; }
+        public string UserAlteracao { get; set; }
+        public int IdOrigem { get; set; }
+
+
+        public Receber()
+        {
+        }
+
+        public Receber(Pessoa pessoa, int pessoaId, DateTime dtaMovimento, double valor, 
+                        int idTipo, string observacao, Categoria categoria, int categoriaId,
+                        string userAlteracao)
+        {
+            Pessoa = pessoa;
+            PessoaId = pessoaId;
+            DtaMovimento = dtaMovimento;
+            Valor = valor;
+            IdTipo = idTipo;
+            Observacao = observacao;
+            Categoria = categoria;
+            CategoriaId = categoriaId;
+            DataAlteracao = DateTime.Now;
+            UserAlteracao = userAlteracao;
+
+        }
+
         public string CarregaSituacao(int idTipo)
         {
             if (idTipo == 1)
             {
-                return "Baixado";
+                return "Quitado";
             }
             else
             {

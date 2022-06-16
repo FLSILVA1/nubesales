@@ -2,20 +2,20 @@
 
 @{
     ViewData["Title"] = "Index";
-    
+
 }
 
 <h2>Lista de Contas a Receber</h2>
 
 <p>
     <a asp-action="Create" class="btn btn-default btn-sm">Criar novo</a>
-    <a asp-controller="RelRecebers" asp-action="Index" class="btn btn-default btn-sm">Relatório</a>
-    <label style="font:bolder; color:red">@ViewData["MsgAlerta"]</label>
+    <a asp-controller="RelRecebers" asp-action="Index" asp-route-tipoRel="G" class="btn btn-default btn-sm">Relatório</a>
+
 </p>
 <form asp-action="Index" method="get">
     <div class="form-actions">
         <label style="font-size: smaller"> Situação:</label>
-        <select asp-items=ViewBag.ListaSituacao value="@ViewData["situacao"]" name="situacao"></select>
+        <select asp-for="@ViewData["situacao"]" asp-items=ViewBag.ListaSituacao value="@ViewData["situacao"]" name="situacao"></select>
         <label style="font-size: smaller">Período: </label>
         <input type="date" name="minDate" value="@ViewData["minDate"]" />
         <label style="font-size: smaller"> a </label>
@@ -74,28 +74,33 @@
                     <td>
                         @{
                             ViewData["Tipo"] = item.CarregaSituacao(item.IdTipo);
-                        }
+                        } 
                         @ViewData["Tipo"]
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Observacao)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id"
-                           data-toggle="tooltip"
-                           data-placement="bottom" title="Editar">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </a> |
-                        <a asp-action="Details" asp-route-id="@item.Id"
-                           data-toggle="tooltip"
-                           data-placement="bottom" title="Mais detalhes">
-                            <span class="glyphicon glyphicon-zoom-in"></span>
-                        </a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id"
-                           data-toggle="tooltip"
-                           data-placement="bottom" title="Excluir">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </a>
+                        <!-- Opções -->
+                        <div class="btn-group dropright">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="cursor:pointer">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="btn btn-link" asp-action="Edit" asp-route-id="@item.Id" asp-controller="Recebers">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    Editar
+                                </a>
+                                <a class="btn btn-link" asp-action="Details" asp-route-id="@item.Id" asp-controller="Recebers">
+                                    <span class="glyphicon glyphicon-zoom-in"></span>
+                                    Consultar
+                                </a>
+                                <a class="btn btn-link" asp-action="Delete" asp-route-id="@item.Id" asp-controller="Recebers">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                    Excluir
+                                </a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }

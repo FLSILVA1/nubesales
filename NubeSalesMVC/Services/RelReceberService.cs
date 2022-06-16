@@ -39,5 +39,33 @@ namespace NubeSalesMVC.Services
                     .OrderBy(x => x.DtaMovimento)
                     .ToListAsync();
         }
+        public async Task<List<IGrouping<Categoria, Receber>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate, int? situacao)
+        {
+            var result = from obj in _context.Receber select obj;
+            if (minDate.HasValue)
+            {
+                result = result.Where(x => x.DtaMovimento >= minDate.Value);
+            }
+            if (maxDate.HasValue)
+            {
+                result = result.Where(x => x.DtaMovimento <= maxDate.Value);
+            }
+            if (situacao.HasValue)
+            {
+                result = result.Where(x => x.IdTipo == situacao.Value);
+            }
+
+            var listaReceber = await result
+                    .Include(x => x.Pessoa)
+                    .Include(x => x.Categoria)
+                    .OrderBy(x => x.DtaMovimento)
+                    .ToListAsync();
+
+            List<IGrouping<Categoria, Receber>> agrupamento =  listaReceber
+                    .GroupBy(x => x.Categoria)
+                    .ToList();
+
+            return agrupamento;            
+        }
     }
 }

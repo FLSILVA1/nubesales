@@ -15,6 +15,11 @@ using NubeSalesMVC.Services;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace NubeSalesMVC
 {
@@ -30,25 +35,31 @@ namespace NubeSalesMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            /*
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options => {
-                        options.ExpireTimeSpan = TimeSpan.FromHours(1);
-                        options.LoginPath = new PathString("/Home/Login");
-                    }); */
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                         .AddEntityFrameworkStores<NubeSalesMVCContext>();
 
             services.AddDbContext<NubeSalesMVCContext>(options =>
                      options.UseMySql(Configuration.GetConnectionString("NubeSalesMVCContext"),
                         builder => builder.MigrationsAssembly("NubeSalesMVC")));
+
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                       .RequireAuthenticatedUser()
+                       .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
+
+
+            services.AddControllersWithViews();            
 
             services.AddScoped<PessoaService>();
             services.AddScoped<CategoriaService>();
@@ -56,10 +67,12 @@ namespace NubeSalesMVC
             services.AddScoped<ReceberService>();
             services.AddScoped<RelReceberService>();
             services.AddScoped<RelPagarService>();
+            services.AddScoped<ReceberValidacaoService>();
+            services.AddSingleton<ITempDataProvider, CookieTempDataProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
 
             // Definindo a cultura padrão: pt-BR
@@ -85,13 +98,16 @@ namespace NubeSalesMVC
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvc(routes =>
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
 
         }
     }

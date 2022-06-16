@@ -25,5 +25,6 @@ namespace NubeSalesMVC.Services
                     .Where(x => x.IdTipo == 0)
                     .ToListAsync();
         }
+
     }
 }

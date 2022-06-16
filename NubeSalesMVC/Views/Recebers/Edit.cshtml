@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Receber.Valor" class="control-label"></label>
-                <input asp-for="Receber.Valor" class="form-control" />
+                <input asp-for="Receber.Valor" class="form-control" autocomplete="off" />
                 <span asp-validation-for="Receber.Valor" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -43,15 +43,49 @@
                 <span asp-validation-for="Receber.IdTipo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-default" />
+                <input id="salvarEditCR" data-toggle="modal" data-target="#modalCentral" value="Salvar" class="btn btn-default" />
             </div>
 
+
+            
+            
+                <div class="modal fade" id="modalCentral" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="TituloModalCentralizado"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    Deseja realmente alterar este título?
+                                </div>
+                                @if ((Int32)ViewData["nroContasVinculadas"] > 0)
+                                {
+                                    <label class="switch">
+                                        <input asp-for="AlterarTodos" type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                <label class="control-label">Replicar o valor desta parcela para os demais títulos em aberto.</label>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Sim</button>                                
+                                <button type="reset" class="btn btn-danger" data-dismiss="modal">Não</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Voltar a lista</a>
+    <a asp-action="FilteredIndex">Voltar a lista</a>
 </div>
+<partial name="_NotificationPartial" />
+
 
 

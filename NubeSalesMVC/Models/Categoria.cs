@@ -19,6 +19,37 @@ namespace NubeSalesMVC.Models
 
         [Display(Name = "Receita")]
         public Boolean IntReceber { get; set; }
+        public DateTime DataAlteracao { get; set; }
+        public string UserAlteracao { get; set; }
+
+        public ICollection<Pagar> ContasP { get; set; } = new List<Pagar>();
+
+        public ICollection<Receber> ContasR { get; set; } = new List<Receber>();
+
+        public double TotalPeriodoP(DateTime initial, DateTime final, int? categoria)
+        {
+            var result = from obj in ContasP select obj;
+            if (categoria.HasValue)
+            {
+                result = result.Where(obj => obj.CategoriaId == categoria);
+            }
+            return result
+                    .Where(obj => obj.DtaMovimento >= initial && obj.DtaMovimento <= final)
+                    .Sum(obj => obj.Valor);
+        }
+
+        public double TotalPeriodoR(DateTime initial, DateTime final, int? categoria)
+        {
+            var result = from obj in ContasR select obj;
+            if (categoria.HasValue)
+            {
+                result = result.Where(obj => obj.CategoriaId == categoria);
+            }
+            return result
+                    .Where(obj => obj.DtaMovimento >= initial && obj.DtaMovimento <= final)
+                    .Sum(obj => obj.Valor);
+        }
+
 
     }
 }

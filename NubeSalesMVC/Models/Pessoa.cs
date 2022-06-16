@@ -18,6 +18,8 @@ namespace NubeSalesMVC.Models
 
         [Display(Name = "Cliente")]
         public Boolean IdFinReceber { get; set; }
+        public DateTime DataAlteracao { get; set; }
+        public string UserAlteracao { get; set; }
 
     }
 }

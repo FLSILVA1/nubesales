@@ -185,7 +185,7 @@ using NubeSalesMVC.Models;
             WriteLiteral("\r\n        </dd>\r\n    </dl>\r\n</div>\r\n<div>\r\n    ");
             EndContext();
             BeginContext(1432, 64, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a9a79d0942744716bc850f29bfad4c4e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b258cbf3b0874ba1b8dd59656832cf54", async() => {
                 BeginContext(1486, 6, true);
                 WriteLiteral("Editar");
                 EndContext();
@@ -220,7 +220,7 @@ using NubeSalesMVC.Models;
             WriteLiteral(" |\r\n    ");
             EndContext();
             BeginContext(1504, 40, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "581b35635ab243718d62423d0ef63e21", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d3fbad6e32224f88b99c4554a19bba57", async() => {
                 BeginContext(1526, 14, true);
                 WriteLiteral("Voltar a lista");
                 EndContext();

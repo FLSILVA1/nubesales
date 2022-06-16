@@ -25,5 +25,43 @@ namespace NubeSalesMVC.Services
                     .Where(x => x.IdTipo == 0)
                     .ToListAsync();
         }
+
+        public async Task<List<Receber>> BuscarContasVinculadas(Receber contaReceber)
+        {
+            if (contaReceber.IdOrigem == 0)
+            {
+                return await _context.Receber
+                        .Where(x => x.IdOrigem == contaReceber.Id)
+                        .Where(x => x.IdTipo == 0)
+                        .ToListAsync();
+            } else
+            {
+                return await _context.Receber
+                        .Where(x => x.IdOrigem == contaReceber.IdOrigem || x.Id == contaReceber.IdOrigem)
+                        .Where(x => x.Id != contaReceber.Id)
+                        .Where(x => x.IdTipo == 0)
+                        .ToListAsync();
+            }
+        }
+        public async Task<List<Receber>> BuscarContasVinculadasById(int Id)
+        {
+            var contaReceber = await _context.Receber.Where(x => x.Id == Id).MaxAsync();
+
+            if (contaReceber.IdOrigem == 0)
+            {
+                return await _context.Receber
+                        .Where(x => x.IdOrigem == contaReceber.Id)
+                        .Where(x => x.IdTipo == 0)
+                        .ToListAsync();
+            }
+            else
+            {
+                return await _context.Receber
+                        .Where(x => x.IdOrigem == contaReceber.IdOrigem || x.Id == contaReceber.IdOrigem)
+                        .Where(x => x.Id != contaReceber.Id)
+                        .Where(x => x.IdTipo == 0)
+                        .ToListAsync();
+            }
+        }
     }
 }

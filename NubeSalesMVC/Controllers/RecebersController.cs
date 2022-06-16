@@ -9,38 +9,82 @@ using NubeSalesMVC.Data;
 using NubeSalesMVC.Models;
 using NubeSalesMVC.Services;
 using NubeSalesMVC.Models.ViewModels;
+using System.Text.Json;
+using NubeSalesMVC.Extensions;
 
 namespace NubeSalesMVC.Controllers
 {
-    public class RecebersController : Controller
+    public class RecebersController : BaseController
     {
         private readonly NubeSalesMVCContext _context;
         private readonly PessoaService _pessoaService;
         private readonly ReceberService _receberService;
         private readonly CategoriaService _categoriaService;
+        private readonly ReceberValidacaoService _receberValidacaoService;
 
-        public RecebersController(NubeSalesMVCContext context, PessoaService pessoaService, ReceberService receberService, CategoriaService categoriaService)
+        public RecebersController(
+                    NubeSalesMVCContext context,
+                    PessoaService pessoaService,
+                    ReceberService receberService,
+                    CategoriaService categoriaService,
+                    ReceberValidacaoService receberValidacaoService)
         {
             _context = context;
             _pessoaService = pessoaService;
             _receberService = receberService;
             _categoriaService = categoriaService;
+            _receberValidacaoService = receberValidacaoService;
+        }
+
+        public FiltroGrade LerJson(string jsonString)
+        {
+            return JsonSerializer.Deserialize<FiltroGrade>(jsonString);
         }
 
         // GET: Recebers
+        public async Task<IActionResult> FilteredIndex()
+        {
+            FiltroGrade filtroGradeReceber = null;
+            try
+            {
+                filtroGradeReceber = JsonSerializer.Deserialize<FiltroGrade>(TempData["FiltroGrade"] as string);
+            }
+            catch { }
+
+            if (filtroGradeReceber != null)
+            {
+                return RedirectToAction("Index",
+                    new
+                    {
+                        ordem = filtroGradeReceber.Ordem,
+                        filtroAtual = filtroGradeReceber.FiltroAtual,
+                        filtro = filtroGradeReceber.Filtro,
+                        pagina = filtroGradeReceber.Pagina,
+                        situacao = filtroGradeReceber.Situacao,
+                        minDate = filtroGradeReceber.MinDate,
+                        maxDate = filtroGradeReceber.MaxDate
+                    });
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Index(string ordem, string filtroAtual, string filtro, int? pagina, int? situacao, DateTime? minDate, DateTime? maxDate)
         {
             CarregaTipo();
+
+
             //contas vencendo - alerta
+            /*
             var ctvenc = await _receberService.ContasVencendo();
             var qtde = ctvenc.Count;
             if (qtde > 0)
             {
                 ViewData["MsgALerta"] = "Atenção! Existem " + qtde.ToString() + " contas próximas ao vencimento ou vencidas.";
-            }
+            }*/
             ViewData["ordemAtual"] = ordem;
             ViewData["NomeParm"] = String.IsNullOrEmpty(ordem) ? "nome_desc" : "";
-            ViewData["situacao"] = situacao.GetValueOrDefault(0);
+            ViewData["situacao"] = situacao ?? 0;
             if (!minDate.HasValue)
             {
                 minDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -89,6 +133,20 @@ namespace NubeSalesMVC.Controllers
             contas = contas.Include(x => x.Pessoa);
             contas = contas.Include(x => x.Categoria);
 
+            //Guarda o filtro atual
+            var filtroGrade = new FiltroGrade()
+            {
+                Ordem = ordem,
+                Filtro = filtro,
+                FiltroAtual = filtroAtual,
+                MinDate = minDate,
+                MaxDate = maxDate,
+                Pagina = pagina,
+                Situacao = situacao
+            };
+
+            TempData["FiltroGrade"] = JsonSerializer.Serialize(filtroGrade);
+
             int pageSize = 15;
             return View(await PaginatedList<Receber>.CreateAsync(contas.AsNoTracking(), pagina ?? 1, pageSize));
 
@@ -96,7 +154,7 @@ namespace NubeSalesMVC.Controllers
         }
 
         // GET: Recebers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, FiltroGrade filtroIndex)
         {
             if (id == null)
             {
@@ -111,14 +169,14 @@ namespace NubeSalesMVC.Controllers
             }
             var pessoas = await _pessoaService.BuscaPessoa(receber.PessoaId);
             var categ = await _categoriaService.FindById(receber.CategoriaId);
-            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas, Categorias = categ };
+            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas, Categorias = categ, FiltroIndex = filtroIndex };
             return View(viewModel);
         }
 
         // GET: Recebers/Create
         public async Task<IActionResult> Create(int? IdCategoria)
         {
-            CarregaTipo();         
+            CarregaTipo();
             var pessoas = await _pessoaService.FindAllCliente();
             var categorias = await _categoriaService.FindByTipo("R");
             if (IdCategoria != null)
@@ -127,8 +185,8 @@ namespace NubeSalesMVC.Controllers
                 {
                     CategoriaId = (int)IdCategoria,
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
-                };            
-                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias };
+                };
+                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias, NroParcelas = 1 };
                 return View(viewModel);
             }
             else
@@ -137,10 +195,10 @@ namespace NubeSalesMVC.Controllers
                 {
                     DtaMovimento = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)
                 };
-                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias };
+                var viewModel = new ReceberFormViewModel { Pessoas = pessoas, Receber = receber, Categorias = categorias, NroParcelas = 1 };
                 return View(viewModel);
             }
-            
+
         }
 
         // POST: Recebers/Create
@@ -148,13 +206,52 @@ namespace NubeSalesMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Receber receber)
+        public async Task<IActionResult> Create(Receber receber, int? nroParcelas)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(receber);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                receber.UserAlteracao = User.Identity.Name;
+                receber.DataAlteracao = DateTime.Now;
+
+
+                if (!nroParcelas.HasValue || nroParcelas < 0) { nroParcelas = 1; }
+                if (nroParcelas.HasValue && nroParcelas > 1)
+                {
+                    List<Receber> parcelas = new List<Receber> { };
+                    for (int i = 1; i <= nroParcelas; i++)
+                    {
+                        parcelas.Add(item: new Receber(
+                            receber.Pessoa,
+                            receber.PessoaId,
+                            receber.DtaMovimento.AddMonths(i - 1),
+                            receber.Valor,
+                            receber.IdTipo,
+                            receber.Observacao + " (Parc. " + i + "/" + nroParcelas + ")",
+                            receber.Categoria,
+                            receber.CategoriaId,
+                            receber.UserAlteracao));
+                    }
+
+                    var idOrigem = 0;
+                    foreach (var poReceb in parcelas)
+                    {
+                        poReceb.IdOrigem = idOrigem;
+
+                        _context.Add(poReceb);
+                        await _context.SaveChangesAsync();
+
+                        if (idOrigem == 0)
+                        {
+                            idOrigem = poReceb.Id;
+                        }
+                    }
+                }
+                else
+                {
+                    _context.Add(receber);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction(nameof(FilteredIndex));
             }
             return View(receber);
         }
@@ -173,9 +270,14 @@ namespace NubeSalesMVC.Controllers
                 return NotFound();
             }
             CarregaTipo();
+            var contasVinculadas = await _receberService.BuscarContasVinculadas(receber);
+            ViewData["nroContasVinculadas"] = contasVinculadas.Count;
+            ViewData["valorOriginal"] = receber.Valor;
+            ViewData["valorDigitado"] = 0;
+
             var pessoas = await _pessoaService.BuscaPessoa(receber.PessoaId);
             var categ = await _categoriaService.FindByTipo("R");
-            var viewModel = new ReceberFormViewModel {Receber = receber, Pessoas = pessoas, Categorias = categ };
+            var viewModel = new ReceberFormViewModel { Receber = receber, Pessoas = pessoas, Categorias = categ, AlterarTodos = true };            
             return View(viewModel);
         }
 
@@ -184,7 +286,7 @@ namespace NubeSalesMVC.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Receber receber)
+        public async Task<IActionResult> Edit(int id, Receber receber, Boolean alterarTodos)
         {
             if (id != receber.Id)
             {
@@ -193,9 +295,26 @@ namespace NubeSalesMVC.Controllers
 
             if (ModelState.IsValid)
             {
+
                 try
                 {
-                    _context.Update(receber);
+
+                    var listaContasVinculadas = await _receberService.BuscarContasVinculadas(receber);
+                    if (listaContasVinculadas.Count > 0 && alterarTodos)
+                    {
+                        listaContasVinculadas.Add(receber);
+                        foreach (var parcela in listaContasVinculadas)
+                        {
+                            parcela.Valor = receber.Valor;
+
+                            _context.Update(parcela);
+                        }
+                    }
+                    else
+                    {
+                        _context.Update(receber);
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -209,10 +328,11 @@ namespace NubeSalesMVC.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(FilteredIndex));
             }
             return View(receber);
         }
+  
 
         // GET: Recebers/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -242,7 +362,7 @@ namespace NubeSalesMVC.Controllers
             var receber = await _context.Receber.FindAsync(id);
             _context.Receber.Remove(receber);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(FilteredIndex));
         }
 
         private bool ReceberExists(int id)
@@ -255,21 +375,11 @@ namespace NubeSalesMVC.Controllers
             var listaSituacao = new List<SelectListItem>
             {
                 new SelectListItem{Text = "Aberto", Value = "0"},
-                new SelectListItem{Text = "Baixado", Value = "1"}
+                new SelectListItem{Text = "Quitado", Value = "1"}
             };
+
 
             ViewBag.ListaSituacao = listaSituacao;
-
-            var tipoReceita = new List<SelectListItem>
-            {
-                new SelectListItem{Text = "Contratos", Value = "0" },
-                new SelectListItem{Text = "Serviços", Value = "1" },
-                new SelectListItem{Text = "Licenças", Value = "2" },
-                new SelectListItem{Text = "Hardware", Value = "3" },
-                new SelectListItem{Text = "Comissões", Value = "4" }
-            };
-
-            ViewBag.ListaTipoReceita = tipoReceita;
 
         }
 

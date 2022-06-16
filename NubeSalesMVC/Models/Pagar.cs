@@ -37,14 +37,31 @@ namespace NubeSalesMVC.Models
         public string Observacao { get; set; }
 
         public Categoria Categoria { get; set; }
+        public DateTime DataAlteracao { get; set; }
+        public string UserAlteracao { get; set; }
+        public int IdOrigem { get; set; }
 
+        public Pagar()
+        {
+        }
 
+        public Pagar(Pessoa pessoa, int pessoaId, DateTime dtaMovimento, double valor, int idTipo, int categoriaId, string observacao, Categoria categoria)
+        {
+            Pessoa = pessoa;
+            PessoaId = pessoaId;
+            DtaMovimento = dtaMovimento;
+            Valor = valor;
+            IdTipo = idTipo;
+            CategoriaId = categoriaId;
+            Observacao = observacao;
+            Categoria = categoria;
+        }
 
         public string CarregaSituacao(int idTipo)
         {
             if (idTipo == 1)
             {
-                return "Baixado";
+                return "Quitado";
             }
             else
             {
@@ -53,20 +70,5 @@ namespace NubeSalesMVC.Models
 
         }
 
-        public string CarregaTipoDespesa(int idTipoDespesa)
-        {
-            if (idTipoDespesa == 0)
-            {
-                return "Despesas fixas";
-            }
-            else if (idTipoDespesa == 1)
-            {
-                return "Despesas variáveis";
-            }
-            else
-            {
-                return "<Não definido>";
-            }
-        }
     }
 }

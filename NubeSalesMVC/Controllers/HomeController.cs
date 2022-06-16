@@ -9,10 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using NubeSalesMVC.Data;
 using NubeSalesMVC.Models.ViewModels;
 using NubeSalesMVC.Services;
+using Microsoft.AspNetCore.Authorization;
+using NubeSalesMVC.Extensions;
 
 namespace NubeSalesMVC.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly NubeSalesMVCContext _context;
         private readonly CategoriaService _categoriaService;
@@ -21,11 +23,24 @@ namespace NubeSalesMVC.Controllers
             _context = context;
             _categoriaService = categoriaService;
         }
-        public async Task<IActionResult> Index()
-        {
-            var categ = await _categoriaService.FindAll();
-            var viewModel = new HomeFormViewModel { Categorias = categ };
-            return View(viewModel);
+        [Route("")]
+        [Route("Home")]
+        [Route("Home/Index")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Index(string alertaModal)
+        {            
+            if (User.Identity.IsAuthenticated)
+            {
+                var categ = await _categoriaService.FindAll();
+                var viewModel = new HomeFormViewModel { Categorias = categ };
+                
+                ViewData["AlertaModal"] = alertaModal;
+                return View(viewModel);
+            }
+            else
+            {                
+                return View();
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

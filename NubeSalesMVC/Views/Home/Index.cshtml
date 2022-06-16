@@ -2,40 +2,81 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<h2>Principais Ações</h2>
-<div class="col-lg-12">
-    <div class="list-group col-lg-4">
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
 
-        <div>
-            <a class="btn btn-link" asp-action="Create" asp-controller="Pessoas">Novo cliente/credor</a>
-        </div>
-        <div>
-            <!-- Contas a Receber -->
-            <div class="btn-group dropright">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Nova conta a receber
-                </button>
-                <div class="dropdown-menu">
-                    @foreach (var itemR in Model.Categorias.Where(x => x.IntReceber == true).Take(8))
-                    {
-                        <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemR.Id" asp-controller="Recebers">@itemR.Name</a>
-                    }
+@if (ViewData["AlertaModal"] != null)
+{
+    <!-- Modal -->
+    <div>
+        <button id="runModal" type="button" data-toggle="modal" data-target="#modalCentral" style="font-size:0; border:none; background-color:transparent">
+        </button>
+    </div>
+    <div class="modal fade" id="modalCentral" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="TituloModalCentralizado"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </div>
-        </div>
-        <div>
-            <!-- Contas a Pagar -->
-            <div class="btn-group dropright">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Nova conta a pagar
-                </button>
-                <div class="dropdown-menu">
-                    @foreach (var itemP in Model.Categorias.Where(x => x.IntPagar == true).Take(8))
-                    {
-                        <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemP.Id" asp-controller="Pagars">@itemP.Name</a>
-                    }
+                <div class="modal-body">
+                    @ViewBag.AlertaModal
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    @section scripts{
+        <script type="text/javascript">
+            $("#runModal").click();
+        </script>
+    }
+
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <h2>Principais Ações</h2>
+    <div class="col-lg-12">
+        <div class="list-group col-lg-4">
+
+            <div>
+                <a class="btn btn-link" asp-action="Create" asp-controller="Pessoas">Novo cliente/credor</a>
+            </div>
+            <div>
+                <!-- Contas a Receber -->
+                <div class="btn-group dropright">
+                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Nova conta a receber
+                    </button>
+                    <div class="dropdown-menu">
+                        @foreach (var itemR in Model.Categorias.Where(x => x.IntReceber == true).Take(8))
+                        {
+                            <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemR.Id" asp-controller="Recebers">@itemR.Name</a><br />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div>
+                <!-- Contas a Pagar -->
+                <div class="btn-group dropright">
+                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Nova conta a pagar
+                    </button>
+                    <div class="dropdown-menu">
+                        @foreach (var itemP in Model.Categorias.Where(x => x.IntPagar == true).Take(8))
+                        {
+                            <a class="btn btn-link" asp-action="Create" asp-route-IdCategoria="@itemP.Id" asp-controller="Pagars">@itemP.Name</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

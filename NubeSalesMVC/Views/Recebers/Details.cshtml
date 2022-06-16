@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    ViewData["Tipo"] = Model.Receber.CarregaSituacao(Model.Receber.IdTipo);    
+    ViewData["Tipo"] = Model.Receber.CarregaSituacao(Model.Receber.IdTipo);
 }
 
 <h2>Detalhes</h2>
@@ -48,8 +48,12 @@
             @Html.DisplayFor(model => model.Receber.Observacao)
         </dd>
     </dl>
+
+
+
 </div>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Receber.Id">Editar</a> |
-    <a asp-action="Index">Voltar a lista</a>
+    <a asp-action="FilteredIndex">Voltar a lista</a>
 </div>
